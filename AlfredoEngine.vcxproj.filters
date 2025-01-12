@@ -23,4 +23,25 @@
     <None Include=".gitignore" />
     <None Include=".gitattributes" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\GLEW\glew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\GLFW\glfw3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="external\GLEW\glew32s.lib" />
+    <Library Include="external\GLFW\glfw3.lib" />
+  </ItemGroup>
 </Project>

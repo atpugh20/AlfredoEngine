@@ -1,0 +1,22 @@
+#pragma once
+
+#include "GLEW/glew.h"
+#include "GLFW/glfw3.h"
+
+#define CloseWindow() glfwTerminate();\
+    return nullptr;
+
+static GLFWwindow* createWindow(int width, int height, const char* title) { 
+    GLFWwindow *window;
+    if (!glfwInit())
+        return nullptr;
+
+    window = glfwCreateWindow(width, height, title, NULL, NULL);
+    if (!window) CloseWindow()
+
+    GLenum err = glewInit();
+    if (GLEW_OK != err) CloseWindow();
+
+    glfwMakeContextCurrent(window);
+    return window;
+}

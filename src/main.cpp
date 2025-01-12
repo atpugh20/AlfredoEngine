@@ -1,8 +1,19 @@
-#include <iostream>
+#include "macros.h"
+#include "Window.h"
 
-#define print(x) std::cout << x << '\n';
+int main(void) {
 
-int main() {
-    print("Hello World!");
+    GLFWwindow* window = createWindow(600, 600, "Alfredo Engine");
+    if (!window) 
+        return -1;
+
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
     return 0;
 }
