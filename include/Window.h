@@ -2,7 +2,7 @@
 
 #define GLEW_STATIC
 
-#include "GLEW/glew.h"
+#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 
@@ -22,10 +22,8 @@ static GLFWwindow* createWindow(int width, int height, const char* title) {
 
     glfwMakeContextCurrent(window);
 
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        glfwTerminate();
-        printError("Glew not ok");
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { 
+        printError("Failed to initialize GLAD");
         return nullptr;
     }
 

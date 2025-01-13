@@ -3,6 +3,7 @@
 
 int main(void) {
 
+    // Create Window
     GLFWwindow* window = createWindow(600, 600, "Alfredo Engine");
     if (!window) 
         return -1;
