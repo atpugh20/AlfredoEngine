@@ -148,6 +148,7 @@
     <ClInclude Include="external\GLAD\KHR\khrplatform.h" />
     <ClInclude Include="external\GLEW\glew.h" />
     <ClInclude Include="external\GLFW\glfw3.h" />
+    <ClInclude Include="external\stb_image\stb_image.h" />
     <ClInclude Include="include\ElementBuffer.h" />
     <ClInclude Include="include\macros.h" />
     <ClInclude Include="include\Shader.h" />
