@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="external\GLAD\src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -147,8 +148,12 @@
     <ClInclude Include="external\GLAD\KHR\khrplatform.h" />
     <ClInclude Include="external\GLEW\glew.h" />
     <ClInclude Include="external\GLFW\glfw3.h" />
+    <ClInclude Include="include\ElementBuffer.h" />
     <ClInclude Include="include\macros.h" />
     <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\VertexArray.h" />
+    <ClInclude Include="include\VertexBuffer.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
