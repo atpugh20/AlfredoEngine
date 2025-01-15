@@ -136,8 +136,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="external\GLAD\src\glad.c" />
+    <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
@@ -160,6 +162,10 @@
   <ItemGroup>
     <Library Include="external\GLEW\glew32s.lib" />
     <Library Include="external\GLFW\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\brick.png" />
+    <Image Include="res\textures\torchic.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
