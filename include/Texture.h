@@ -2,8 +2,8 @@
 
 #include <macros.h>
 
-#include <GLAD/glad.h>
-#include <stb_image/stb_image.h>
+#include "GLAD/glad.h"
+#include "stb/stb_image.h"
 
 #include <string>
 
