@@ -1371,5 +1371,17 @@
     <Image Include="res\textures\torchic.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\cobble.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\diamond.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\stone.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\leaves.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

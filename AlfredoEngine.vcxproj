@@ -594,6 +594,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\brick.png" />
+    <Image Include="res\textures\cobble.png" />
+    <Image Include="res\textures\diamond.png" />
+    <Image Include="res\textures\leaves.png" />
+    <Image Include="res\textures\stone.png" />
     <Image Include="res\textures\torchic.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
