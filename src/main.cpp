@@ -83,37 +83,36 @@ int main(void) {
     // Vertex and index Data
     float vertices[] = {
         // Positions       // Colors           // Texture coords
-
         // front
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left
+        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
         // back
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left
+         off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+        -off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+        -off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+         off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
         // left
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left        
+        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+        -off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+        -off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left        
         // right
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left
+         off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+         off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
         // top
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left
+        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
         // bottom
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f,         // Top left
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,         // Top right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,         // Bot right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,         // Bot left
+        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
+         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
     };
 
     int indices[] = {
@@ -172,8 +171,6 @@ int main(void) {
     glm::mat4 mvp;
 
     const float radius = 20.0f;
-    float camX;
-    float camZ;
 
     // Rotation of cubes
     float degrees = 0.1f;
@@ -186,10 +183,7 @@ int main(void) {
         processInput(window);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        degrees += 0.1f;
-        //cameraPos.z += 0.01;
-        camX = sin(glfwGetTime()) * radius;
-        camZ = cos(glfwGetTime()) * radius;
+        degrees += 20.0f * deltaTime;
 
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
