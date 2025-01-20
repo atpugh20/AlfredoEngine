@@ -50,6 +50,13 @@ glm::vec3 cameraPos     = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront   = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp      = glm::vec3(0.0f, 1.0f,  0.0f);
 
+bool firstMouse = true;
+float yaw       = -90.0f;
+float pitch     = 0.0f;
+float lastX     = 800.0f / 2.0;
+float lastY     = 600.0f / 2.0;
+float FOV = 80.0f;
+
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -65,6 +72,45 @@ void processInput(GLFWwindow *window) {
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.05f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(direction);
+}
+
+void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+    FOV -= (float)yoffset;
+    if (FOV < 45.0f)
+        FOV = 45.0f;
+    if (FOV > 120.0f)
+        FOV = 120.0f;
+}
+
 int main(void) {
         
     const float w_W = 800.0f;
@@ -78,7 +124,7 @@ int main(void) {
     glEnable(GL_DEPTH_TEST);
    
     const int floatsPerVertex   = 8;
-    const float off              = 0.5f;  // Distance each vertex is offset from the center point
+    const float off             = 0.5f;  // Distance each vertex is offset from the center point
 
     // Vertex and index Data
     float vertices[] = {
@@ -141,7 +187,7 @@ int main(void) {
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
     ElementBuffer *EBO = new ElementBuffer();
-    Texture *texture = new Texture("res/textures/diamond.png");
+    Texture *texture = new Texture("res/textures/cobble.png");
     Shader *shader = new Shader(vsSource, fsSource);
     
     // Bind everything to GPU
@@ -165,6 +211,10 @@ int main(void) {
     
     // Camera
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetScrollCallback(window, scrollCallback);
+
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
@@ -187,8 +237,7 @@ int main(void) {
 
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-        //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        projection = glm::perspective(glm::radians(45.0f), w_W / w_H, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(FOV), w_W / w_H, 0.1f, 100.0f);
 
         for (unsigned int i = 0; i < 10; i++) {
             model = glm::mat4(1.0f);
