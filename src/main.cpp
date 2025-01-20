@@ -11,8 +11,12 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "ElementBuffer.h"
+#include "Camera.h"
+#include "Perlin.hpp"
 
 #include <cmath>
+#include <cstdlib>
+#include <vector>
 
 const char* vsSource = R"(
 #version 460 core
@@ -46,82 +50,37 @@ void main() {
 }
 )";
 
-glm::vec3 cameraPos     = glm::vec3(0.0f, 0.0f,  3.0f);
-glm::vec3 cameraFront   = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp      = glm::vec3(0.0f, 1.0f,  0.0f);
+void mouseCallback(GLFWwindow *window, double xpos, double ypos);
+void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+void processInput(GLFWwindow *window);
+
+const float w_W = 800.0f;  // Window width
+const float w_H = 600.0f;  // Window height
+
+Camera camera(glm::vec3(5.0f, 10.0f, 15.0f));
 
 bool firstMouse = true;
-float yaw       = -90.0f;
-float pitch     = 0.0f;
-float lastX     = 800.0f / 2.0;
-float lastY     = 600.0f / 2.0;
-float FOV = 80.0f;
+float lastX     = w_W / 2.0;
+float lastY     = w_H / 2.0;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-void processInput(GLFWwindow *window) {
-    const float cameraSpeed = 5.0f * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-}
-
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
-
-    float sensitivity = 0.05f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
-}
-
-void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
-    FOV -= (float)yoffset;
-    if (FOV < 45.0f)
-        FOV = 45.0f;
-    if (FOV > 120.0f)
-        FOV = 120.0f;
-}
 
 int main(void) {
-        
-    const float w_W = 800.0f;
-    const float w_H = 600.0f;
-
+    srand(time(0));
+    const siv::PerlinNoise::seed_type seed = rand() % 99999;
+    const siv::PerlinNoise perlin{ seed };
+    
     // Create Window
     GLFWwindow* window = createWindow(w_W, w_H, "Alfredo Engine");
     if (!window) 
         return -1;
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
    
     const int floatsPerVertex   = 8;
     const float off             = 0.5f;  // Distance each vertex is offset from the center point
@@ -133,22 +92,22 @@ int main(void) {
         -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
          off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
          off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+        -off, -off,  off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
         // back
          off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
         -off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
         -off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+         off, -off, -off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
         // left
         -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
         -off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
         -off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left        
+        -off, -off, -off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left        
         // right
          off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
          off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
          off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+         off, -off,  off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
         // top
         -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
          off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
@@ -171,25 +130,29 @@ int main(void) {
     };
     const int iCount = sizeof(indices) / sizeof(indices[0]);
 
-    glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f,  0.0f,  0.0f),
-        glm::vec3(2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3(2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3(1.3f, -2.0f, -2.5f),
-        glm::vec3(1.5f,  2.0f, -2.5f),
-        glm::vec3(1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
+    std::vector<glm::vec3> cubePositions;
+
+    int xMax = 10;
+    int yMax = 10;
+    int zMax = 10;
+    float noiseOff = 0.2f;
+
+    for (float x = 0.0f; x < xMax; x++) {
+        for (float y = 0.0f; y < yMax; y++) {
+            for (float z = 0.0f; z < zMax; z++) {
+                const double noise = perlin.noise3D_01(x * noiseOff, y * noiseOff, z * noiseOff);
+                if (noise < 0.5 || y < 1)
+                    cubePositions.push_back(glm::vec3(x, y, z));
+            }
+        }
+    }
 
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
     ElementBuffer *EBO = new ElementBuffer();
-    Texture *texture = new Texture("res/textures/cobble.png");
+    Texture *texture = new Texture("res/textures/stone.png");
     Shader *shader = new Shader(vsSource, fsSource);
-    
+
     // Bind everything to GPU
     VAO->bind();
     VBO->bind(vertices, sizeof(vertices));
@@ -210,7 +173,6 @@ int main(void) {
     glEnableVertexAttribArray(2);
     
     // Camera
-
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetScrollCallback(window, scrollCallback);
@@ -226,30 +188,34 @@ int main(void) {
     float degrees = 0.1f;
 
     while (!glfwWindowShouldClose(window)) {
+
+        // Calculate deltaTime
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
+        print(1 / deltaTime);
+
         processInput(window);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glClearColor(0.53f, 0.8f, 0.92f, 0.5f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear the window between frames
 
         degrees += 20.0f * deltaTime;
-
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
-        projection = glm::perspective(glm::radians(FOV), w_W / w_H, 0.1f, 100.0f);
-
-        for (unsigned int i = 0; i < 10; i++) {
+        
+        // Calculate Model View Projection
+        view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
+        projection = glm::perspective(glm::radians(camera.Zoom), w_W / w_H, 0.1f, 100.0f);
+        for (unsigned int i = 0; i < cubePositions.size(); i++) {
             model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
+            //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
             mvp = projection * view * model;
             shader->setMat4("mvp", mvp);
             glDrawElements(GL_TRIANGLES, iCount, GL_UNSIGNED_INT, 0);
         }
-         
-        glUseProgram(program);
         
+        glUseProgram(program);
         VAO->bind();
         VBO->bind(vertices, sizeof(vertices));
 
@@ -265,4 +231,41 @@ int main(void) {
 
     glfwTerminate();
     return 0;
+}
+    
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+}
+
+void mouseCallback(GLFWwindow *window, double xposIn, double yposIn) {
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }

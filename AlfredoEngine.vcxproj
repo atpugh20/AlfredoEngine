@@ -138,6 +138,7 @@
     <ClCompile Include="external\GLAD\src\glad.c" />
     <ClCompile Include="external\glm\detail\glm.cpp" />
     <ClCompile Include="external\glm\glm.cppm" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
@@ -580,8 +581,10 @@
     <ClInclude Include="external\glm\vector_relational.hpp" />
     <ClInclude Include="external\stb\stb_image.h" />
     <ClInclude Include="external\stb_image\stb_image.h" />
+    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\ElementBuffer.h" />
     <ClInclude Include="include\macros.h" />
+    <ClInclude Include="include\Perlin.hpp" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\VertexArray.h" />
