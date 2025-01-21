@@ -13,6 +13,7 @@
 #include "ElementBuffer.h"
 #include "Camera.h"
 #include "Perlin.hpp"
+#include "Cube.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -84,53 +85,8 @@ int main(void) {
    
     const int floatsPerVertex   = 8;
     const float off             = 0.5f;  // Distance each vertex is offset from the center point
-
-    // Vertex and index Data
-    float vertices[] = {
-        // Positions       // Colors           // Texture coords
-        // front
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off, -off,  off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
-        // back
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-         off, -off, -off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
-        // left
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off, -off, -off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left        
-        // right
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-         off, -off,  off,   0.5f, 0.5f, 0.5f,   0.0f,  0.0f,     // Bot left
-        // top
-        -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-         off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-         off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
-        // bottom
-        -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-         off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-         off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-        -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
-    };
-
-    int indices[] = {
-        0,  1,  2,     2,  3,  0,  // front
-        4,  5,  6,     6,  7,  4,  // back
-        8,  9, 10,    10, 11,  8,  // left
-       12, 13, 14,    14, 15, 12,  // right
-       16, 17, 18,    18, 19, 16,  // top
-       20, 21, 22,    22, 23, 20,  // bottom
-    };
-    const int iCount = sizeof(indices) / sizeof(indices[0]);
-
-    std::vector<glm::vec3> cubePositions;
+    
+    std::vector<Cube> cubes;
 
     int xMax = 10;
     int yMax = 10;
@@ -142,10 +98,12 @@ int main(void) {
             for (float z = 0.0f; z < zMax; z++) {
                 const double noise = perlin.noise3D_01(x * noiseOff, y * noiseOff, z * noiseOff);
                 if (noise < 0.5 || y < 1)
-                    cubePositions.push_back(glm::vec3(x, y, z));
+                    cubes.push_back(Cube(x, y, z, off));
             }
         }
     }
+
+    int cubeCount = cubes.size();
 
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
@@ -155,8 +113,8 @@ int main(void) {
 
     // Bind everything to GPU
     VAO->bind();
-    VBO->bind(vertices, sizeof(vertices));
-    EBO->bind(indices, sizeof(indices));
+    VBO->bind(cubes[0].vertices.data(), cubes[0].vertices.size() * sizeof(float));
+    EBO->bind(cubes[0].indices.data(), cubes[0].indices.size() * sizeof(int));
     texture->bind(0);
     shader->bind();
 
@@ -188,7 +146,7 @@ int main(void) {
     float degrees = 0.1f;
 
     while (!glfwWindowShouldClose(window)) {
-
+        
         // Calculate deltaTime
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -206,18 +164,19 @@ int main(void) {
         // Calculate Model View Projection
         view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
         projection = glm::perspective(glm::radians(camera.Zoom), w_W / w_H, 0.1f, 100.0f);
-        for (unsigned int i = 0; i < cubePositions.size(); i++) {
+
+        for (unsigned int i = 0; i < cubeCount; i++) {
             model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
+            model = glm::translate(model, cubes[i].position);
             //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
             mvp = projection * view * model;
             shader->setMat4("mvp", mvp);
-            glDrawElements(GL_TRIANGLES, iCount, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, cubes[0].indices.size(), GL_UNSIGNED_INT, 0);
         }
         
         glUseProgram(program);
         VAO->bind();
-        VBO->bind(vertices, sizeof(vertices));
+        VBO->bind(cubes[0].vertices.data(), cubes[0].vertices.size() * sizeof(float));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
