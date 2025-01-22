@@ -67,7 +67,6 @@ float lastY     = w_H / 2.0;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-
 int main(void) {
     srand(time(0));
     const siv::PerlinNoise::seed_type seed = rand() % 99999;
