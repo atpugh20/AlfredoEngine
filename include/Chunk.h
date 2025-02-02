@@ -1,14 +1,61 @@
 #pragma once
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
 #include "Cube.h"
+#include "Perlin.hpp"
+#include "Shader.h"
+
+#include <vector>
 
 class Chunk {
-public:
-    Cube cubes[16];
+private:
+    const siv::PerlinNoise::seed_type seed = rand() % 99999;
+    const siv::PerlinNoise perlin{ seed };
+    glm::mat4 model;
+    int cubeCount;
 
-    Chunk();
-    ~Chunk();
+    int xMax = 10;
+    int yMax = 10;
+    int zMax = 10;
+    float noiseOff = 0.2f;
+    float off = 0.5;
+
+public:
+    std::vector<Cube> cubes;
+    Chunk() {
+        Fill();
+    }
+
+    void Fill() {
+        cubes.clear();
+        for (float x = 0.0f; x < xMax; x++) {
+            for (float y = 0.0f; y < yMax; y++) {
+                for (float z = 0.0f; z < zMax; z++) {
+                    const double noise = perlin.noise3D_01(x * noiseOff, y * noiseOff, z * noiseOff);
+                    if (noise < 0.5 || y < 1)
+                        cubes.push_back(Cube(x, y, z, off));
+                }
+            }
+        }
+        cubeCount = cubes.size();
+    }
+
+    void Draw(glm::mat4 view, glm::mat4 projection, glm::mat4& mvp, Shader* shader) {
+        for (unsigned int i = 0; i < cubeCount; i++) {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, cubes[i].position);
+            //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
+            mvp = projection * view * model;
+            shader->setMat4("mvp", mvp);
+            cubes[i].draw();
+        }
+    }
 
 private:
+
+    // Check if block is surrounded or not
 
 };

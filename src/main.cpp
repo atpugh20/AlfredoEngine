@@ -12,8 +12,8 @@
 #include "VertexBuffer.h"
 #include "ElementBuffer.h"
 #include "Camera.h"
-#include "Perlin.hpp"
 #include "Cube.h"
+#include "Chunk.h"
 
 #include <cmath>
 #include <cstdlib>
@@ -69,9 +69,7 @@ float lastFrame = 0.0f;
 
 int main(void) {
     srand(time(0));
-    const siv::PerlinNoise::seed_type seed = rand() % 99999;
-    const siv::PerlinNoise perlin{ seed };
-    
+        
     // Create Window
     GLFWwindow* window = createWindow(w_W, w_H, "Alfredo Engine");
     if (!window) 
@@ -85,24 +83,12 @@ int main(void) {
     const int floatsPerVertex   = 8;
     const float off             = 0.5f;  // Distance each vertex is offset from the center point
     
-    std::vector<Cube> cubes;
-
-    int xMax = 10;
+    int xMax = 20;
     int yMax = 10;
-    int zMax = 10;
+    int zMax = 20;
     float noiseOff = 0.2f;
 
-    for (float x = 0.0f; x < xMax; x++) {
-        for (float y = 0.0f; y < yMax; y++) {
-            for (float z = 0.0f; z < zMax; z++) {
-                const double noise = perlin.noise3D_01(x * noiseOff, y * noiseOff, z * noiseOff);
-                if (noise < 0.5 || y < 1)
-                    cubes.push_back(Cube(x, y, z, off));
-            }
-        }
-    }
-
-    int cubeCount = cubes.size();
+    Chunk chunk;
 
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
@@ -112,8 +98,8 @@ int main(void) {
 
     // Bind everything to GPU
     VAO->bind();
-    VBO->bind(cubes[0].vertices.data(), cubes[0].vertices.size() * sizeof(float));
-    EBO->bind(cubes[0].indices.data(), cubes[0].indices.size() * sizeof(int));
+    VBO->bind(chunk.cubes[0].vertices.data(), chunk.cubes[0].vertices.size() * sizeof(float));
+    EBO->bind(chunk.cubes[0].indices.data(), chunk.cubes[0].indices.size() * sizeof(int));
     texture->bind(0);
     shader->bind();
 
@@ -134,7 +120,6 @@ int main(void) {
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetScrollCallback(window, scrollCallback);
 
-    glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
     glm::mat4 mvp;
@@ -164,18 +149,11 @@ int main(void) {
         view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
         projection = glm::perspective(glm::radians(camera.Zoom), w_W / w_H, 0.1f, 100.0f);
 
-        for (unsigned int i = 0; i < cubeCount; i++) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, cubes[i].position);
-            //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
-            mvp = projection * view * model;
-            shader->setMat4("mvp", mvp);
-            glDrawElements(GL_TRIANGLES, cubes[0].indices.size(), GL_UNSIGNED_INT, 0);
-        }
+        chunk.Draw(view, projection, mvp, shader);
         
         glUseProgram(program);
         VAO->bind();
-        VBO->bind(cubes[0].vertices.data(), cubes[0].vertices.size() * sizeof(float));
+        VBO->bind(chunk.cubes[0].vertices.data(), chunk.cubes[0].vertices.size() * sizeof(float));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
