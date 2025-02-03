@@ -9,6 +9,9 @@
 #include "Shader.h"
 
 #include <vector>
+#include <unordered_map>
+#include <string>
+#include <format>
 
 class Chunk {
 private:
@@ -24,7 +27,10 @@ private:
     float off = 0.5;
 
 public:
-    std::vector<Cube> cubes;
+
+    // Change this back into a vector and just use the maxes to check around
+    std::unordered_map<std::string, Cube> cubes;
+
     Chunk() {
         Fill();
     }
@@ -35,8 +41,11 @@ public:
             for (float y = 0.0f; y < yMax; y++) {
                 for (float z = 0.0f; z < zMax; z++) {
                     const double noise = perlin.noise3D_01(x * noiseOff, y * noiseOff, z * noiseOff);
+                    std::string key = std::format("{},{},{}", x, y, z);
                     if (noise < 0.5 || y < 1)
-                        cubes.push_back(Cube(x, y, z, off));
+                        cubes[key] = Cube(x, y, z, off, true);
+                    else
+                        cubes[key] = Cube(x, y, z, off, false);
                 }
             }
         }
@@ -44,18 +53,23 @@ public:
     }
 
     void Draw(glm::mat4 view, glm::mat4 projection, glm::mat4& mvp, Shader* shader) {
-        for (unsigned int i = 0; i < cubeCount; i++) {
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, cubes[i].position);
-            //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
-            mvp = projection * view * model;
-            shader->setMat4("mvp", mvp);
-            cubes[i].draw();
+        for (auto &pair : cubes) {
+            if (cubes[pair.first].exists) {
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, cubes[pair.first].position);
+                //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
+                mvp = projection * view * model;
+                shader->setMat4("mvp", mvp);
+                cubes[pair.first].draw();
+            }
         }
     }
 
 private:
 
     // Check if block is surrounded or not
+    bool isSurrounded() {
+
+    }
 
 };

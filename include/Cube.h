@@ -7,12 +7,13 @@
 
 class Cube {
 public: 
+    bool exists;
     std::string texturePath;
     std::vector<float> vertices;
     std::vector<int> indices;
     glm::vec3 position;
 
-    Cube(float x, float y, float z, const float off) {
+    Cube(float x, float y, float z, const float off, bool exists) {
         position = glm::vec3(x, y, z);
          
         vertices = {

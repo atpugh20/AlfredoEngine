@@ -98,8 +98,8 @@ int main(void) {
 
     // Bind everything to GPU
     VAO->bind();
-    VBO->bind(chunk.cubes[0].vertices.data(), chunk.cubes[0].vertices.size() * sizeof(float));
-    EBO->bind(chunk.cubes[0].indices.data(), chunk.cubes[0].indices.size() * sizeof(int));
+    VBO->bind(chunk.cubes["0,0,0"].vertices.data(), chunk.cubes["0,0,0"].vertices.size() * sizeof(float));
+    EBO->bind(chunk.cubes["0,0,0"].indices.data(), chunk.cubes["0,0,0"].indices.size() * sizeof(int));
     texture->bind(0);
     shader->bind();
 
@@ -153,7 +153,7 @@ int main(void) {
         
         glUseProgram(program);
         VAO->bind();
-        VBO->bind(chunk.cubes[0].vertices.data(), chunk.cubes[0].vertices.size() * sizeof(float));
+        VBO->bind(chunk.cubes["0,0,0"].vertices.data(), chunk.cubes["0,0,0"].vertices.size() * sizeof(float));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
