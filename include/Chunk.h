@@ -9,6 +9,7 @@
 #include "Shader.h"
 
 #include <vector>
+#include <tuple>
 #include <unordered_map>
 #include <string>
 #include <format>
@@ -28,8 +29,10 @@ private:
 
 public:
 
-    // Change this back into a vector and just use the maxes to check around
-    std::unordered_map<std::string, Cube> cubes;
+    // Keep this as an unordered map with tuple as the key, then use the tuple to do a lookup
+    // Then you only have to use the tuple for O(1) time complexity.
+    std::unordered_map<std::tuple<int, int, int>, Cube> cubes;
+
 
     Chunk() {
         Fill();
