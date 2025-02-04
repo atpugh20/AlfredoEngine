@@ -90,6 +90,10 @@ int main(void) {
 
     Chunk chunk;
 
+    for (auto &pair : chunk.cubes) {
+        pair.second.checkSurrounding(chunk.cubes);
+    }
+
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
     ElementBuffer *EBO = new ElementBuffer();
@@ -98,8 +102,10 @@ int main(void) {
 
     // Bind everything to GPU
     VAO->bind();
-    VBO->bind(chunk.cubes["0,0,0"].vertices.data(), chunk.cubes["0,0,0"].vertices.size() * sizeof(float));
-    EBO->bind(chunk.cubes["0,0,0"].indices.data(), chunk.cubes["0,0,0"].indices.size() * sizeof(int));
+
+    VBO->bind(chunk.cubes[chunk.last].vertices.data(), chunk.cubes[chunk.last].vertices.size() * sizeof(float));
+    EBO->bind(chunk.cubes[chunk.last].indices.data(), chunk.cubes[chunk.last].indices.size() * sizeof(float));
+
     texture->bind(0);
     shader->bind();
 
@@ -126,8 +132,11 @@ int main(void) {
 
     const float radius = 20.0f;
 
-    // Rotation of cubes
-    float degrees = 0.1f;
+    int flipTime = 1;
+    float lastFlip = 0.0f;
+
+    float sum = 0.0f;
+    int i = 0;
 
     while (!glfwWindowShouldClose(window)) {
         
@@ -136,14 +145,21 @@ int main(void) {
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        print(1 / deltaTime);
+        // Print frames
+        i++;
+        sum += (1 / deltaTime);
+        if (lastFrame > flipTime + lastFlip) {
+            print(sum / i);
+            i = 0;
+            sum = 0.0f;
+            lastFlip = lastFrame;
+        }
 
         processInput(window);
 
         glClearColor(0.53f, 0.8f, 0.92f, 0.5f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear the window between frames
 
-        degrees += 20.0f * deltaTime;
         
         // Calculate Model View Projection
         view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
@@ -153,7 +169,7 @@ int main(void) {
         
         glUseProgram(program);
         VAO->bind();
-        VBO->bind(chunk.cubes["0,0,0"].vertices.data(), chunk.cubes["0,0,0"].vertices.size() * sizeof(float));
+        VBO->bind(chunk.cubes[chunk.last].vertices.data(), chunk.cubes[chunk.last].vertices.size() * sizeof(float));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
