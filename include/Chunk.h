@@ -17,9 +17,7 @@
 
 class Chunk {
 private:
-    siv::PerlinNoise::seed_type seed = rand() % 99999;
-    siv::PerlinNoise perlin{ seed };
-
+    
     glm::mat4 model;
     int cubeCount;
 
@@ -28,12 +26,11 @@ private:
     int zMax = 16;
     float noiseOff = 0.2f;
     float off = 0.5f;
+
+    std::vector<float> vertices;
     
-
 public:
-
     std::unordered_map<std::string, Cube> cubes;
-
     std::string last;  // The last block filled. Used for binding the buffer.
 
     Chunk() {
@@ -41,11 +38,11 @@ public:
     }
 
     void Fill() {
+        siv::PerlinNoise::seed_type seed = rand() % 99999;
+        siv::PerlinNoise perlin{ seed };
+
         cubes.clear();
-        /*siv::PerlinNoise::seed_type seed = rand() % 99999;
-        siv::PerlinNoise perlin{ seed };*/
-
-
+        
         for (int x = 0.0f; x < xMax; x++) {
             for (int y = 0.0f; y < yMax; y++) {
                 for (int z = 0.0f; z < zMax; z++) {
@@ -61,11 +58,23 @@ public:
         cubeCount = cubes.size();
     }
 
+    void BatchVertices() {
+        for (const auto &pair : cubes) {
+            vertices.insert(vertices.end(), pair.second.vertices.begin(), pair.second.vertices.end());
+        }
+    }
+
+    void printVertices() {
+        for (float v : vertices)
+            std::cout << v << ', ';
+    }
+
     void Draw(glm::mat4 view, glm::mat4 projection, glm::mat4& mvp, Shader* shader) {
         
         // Try to batch together all vertices
 
-        for (auto &pair : cubes) {
+        for (const auto &pair : cubes) {
+
             if (pair.second.WillDraw) {
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, cubes[pair.first].position);

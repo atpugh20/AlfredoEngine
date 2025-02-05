@@ -54,6 +54,7 @@ void main() {
 void mouseCallback(GLFWwindow *window, double xpos, double ypos);
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void showFrames();
 
 const float w_W = 800.0f;  // Window width
 const float w_H = 600.0f;  // Window height
@@ -89,6 +90,7 @@ int main(void) {
     float noiseOff = 0.2f;
 
     Chunk chunk;
+    chunk.BatchVertices();
 
     for (auto &pair : chunk.cubes) {
         pair.second.checkSurrounding(chunk.cubes);
