@@ -54,7 +54,7 @@ void main() {
 void mouseCallback(GLFWwindow *window, double xpos, double ypos);
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
-void showFrames();
+void showFrames(int &flipTime, float &lastFlip, int &counter, float &sum);
 
 const float w_W = 800.0f;  // Window width
 const float w_H = 600.0f;  // Window height
@@ -99,7 +99,7 @@ int main(void) {
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
     ElementBuffer *EBO = new ElementBuffer();
-    Texture *texture = new Texture("res/textures/stone.png");
+    Texture *texture = new Texture("res/textures/grass.png");
     Shader *shader = new Shader(vsSource, fsSource);
 
     // Bind everything to GPU
@@ -132,13 +132,12 @@ int main(void) {
     glm::mat4 projection;
     glm::mat4 mvp;
 
-    const float radius = 20.0f;
-
     int flipTime = 1;
     float lastFlip = 0.0f;
+    float frameSum = 0.0f;
+    int frameCounter = 0;
 
-    float sum = 0.0f;
-    int i = 0;
+    chunk.PrintVertices();
 
     while (!glfwWindowShouldClose(window)) {
         
@@ -148,14 +147,7 @@ int main(void) {
         lastFrame = currentFrame;
 
         // Print frames
-        i++;
-        sum += (1 / deltaTime);
-        if (lastFrame > flipTime + lastFlip) {
-            print(sum / i);
-            i = 0;
-            sum = 0.0f;
-            lastFlip = lastFrame;
-        }
+        showFrames(flipTime, lastFlip, frameCounter, frameSum);
 
         processInput(window);
 
@@ -222,4 +214,15 @@ void mouseCallback(GLFWwindow *window, double xposIn, double yposIn) {
 
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+static void showFrames(int &flipTime, float &lastFlip, int &counter, float &sum) {
+    counter++;
+    sum += (1 / deltaTime);
+    if (lastFrame > flipTime + lastFlip) {
+        print(sum / counter);
+        counter = 0;
+        sum = 0.0f;
+        lastFlip = lastFrame;
+    }
 }

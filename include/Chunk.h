@@ -17,7 +17,6 @@
 
 class Chunk {
 private:
-    
     glm::mat4 model;
     int cubeCount;
 
@@ -42,7 +41,7 @@ public:
         siv::PerlinNoise perlin{ seed };
 
         cubes.clear();
-        
+
         for (int x = 0.0f; x < xMax; x++) {
             for (int y = 0.0f; y < yMax; y++) {
                 for (int z = 0.0f; z < zMax; z++) {
@@ -64,21 +63,17 @@ public:
         }
     }
 
-    void printVertices() {
-        for (float v : vertices)
-            std::cout << v << ', ';
+    void PrintVertices() {
+        print(vertices.size());
     }
 
     void Draw(glm::mat4 view, glm::mat4 projection, glm::mat4& mvp, Shader* shader) {
-        
         // Try to batch together all vertices
 
         for (const auto &pair : cubes) {
-
             if (pair.second.WillDraw) {
                 model = glm::mat4(1.0f);
                 model = glm::translate(model, cubes[pair.first].position);
-                //model = glm::rotate(model, glm::radians(20.0f * i + degrees), glm::vec3(1.0f, 0.3f, 0.5f));  
                 mvp = projection * view * model;
                 shader->setMat4("mvp", mvp);
                 cubes[pair.first].draw();

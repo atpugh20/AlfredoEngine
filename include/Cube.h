@@ -31,34 +31,34 @@ public:
             // Positions       // Colors           // Texture coords
             // front
             -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-             off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off, -off,  off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
+             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
             -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
             // back
-             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-            -off, -off, -off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
-             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left
             // left
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-            -off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-            -off, -off,  off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
-            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left        
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
+            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
+            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left        
             // right
-             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-             off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off, -off, -off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
-             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
+             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
+             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left
             // top
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.51f,  1.0f,     // Top left
              off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off,  off,  off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
-            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.51f,  0.0f,     // Bot left
             // bottom
-            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.51f,  1.0f,     // Top left
              off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off, -off, -off,   0.75f, 0.75f, 0.75f,   1.0f,  0.0f,     // Bot right
-            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.51f,  0.0f,     // Bot left
         },
 
         indices{

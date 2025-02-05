@@ -1398,5 +1398,11 @@
     <Image Include="res\textures\leaves.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\..\Downloads\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
