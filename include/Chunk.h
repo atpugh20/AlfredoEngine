@@ -58,6 +58,7 @@ public:
     }
 
     void BatchVertices() {
+        // increment the size of each index buffer for draw elements
         for (const auto &pair : cubes) {
             vertices.insert(vertices.end(), pair.second.vertices.begin(), pair.second.vertices.end());
         }
