@@ -21,14 +21,16 @@ private:
     int cubeCount;
 
     int xMax = 16;
-    int yMax = 16;
+    int yMax = 3;
     int zMax = 16;
     float noiseOff = 0.2f;
     float off = 0.5f;
 
-    std::vector<float> vertices;
+    int indexCount = 0;
     
 public:
+    std::vector<float> vertices;
+
     std::unordered_map<std::string, Cube> cubes;
     std::string last;  // The last block filled. Used for binding the buffer.
 
@@ -61,11 +63,13 @@ public:
         // increment the size of each index buffer for draw elements
         for (const auto &pair : cubes) {
             vertices.insert(vertices.end(), pair.second.vertices.begin(), pair.second.vertices.end());
+            indexCount += pair.second.indices.size();
         }
     }
 
     void PrintVertices() {
         print(vertices.size());
+        print(indexCount);
     }
 
     void Draw(glm::mat4 view, glm::mat4 projection, glm::mat4& mvp, Shader* shader) {
@@ -80,6 +84,7 @@ public:
                 cubes[pair.first].draw();
             }
         }
+        //glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
     }
 
 };

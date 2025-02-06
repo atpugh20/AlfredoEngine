@@ -82,13 +82,7 @@ int main(void) {
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
    
     const int floatsPerVertex   = 8;
-    const float off             = 0.5f;  // Distance each vertex is offset from the center point
     
-    int xMax = 20;
-    int yMax = 10;
-    int zMax = 20;
-    float noiseOff = 0.2f;
-
     Chunk chunk;
     chunk.BatchVertices();
 
@@ -104,10 +98,8 @@ int main(void) {
 
     // Bind everything to GPU
     VAO->bind();
-
     VBO->bind(chunk.cubes[chunk.last].vertices.data(), chunk.cubes[chunk.last].vertices.size() * sizeof(float));
     EBO->bind(chunk.cubes[chunk.last].indices.data(), chunk.cubes[chunk.last].indices.size() * sizeof(float));
-
     texture->bind(0);
     shader->bind();
 
@@ -154,7 +146,6 @@ int main(void) {
         glClearColor(0.53f, 0.8f, 0.92f, 0.5f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear the window between frames
 
-        
         // Calculate Model View Projection
         view = glm::lookAt(camera.Position, camera.Position + camera.Front, camera.Up);
         projection = glm::perspective(glm::radians(camera.Zoom), w_W / w_H, 0.1f, 100.0f);
@@ -163,7 +154,7 @@ int main(void) {
         
         glUseProgram(program);
         VAO->bind();
-        VBO->bind(chunk.cubes[chunk.last].vertices.data(), chunk.cubes[chunk.last].vertices.size() * sizeof(float));
+        VBO->bind(chunk.vertices.data(), chunk.vertices.size() * sizeof(float));
 
         glfwSwapBuffers(window);
         glfwPollEvents();

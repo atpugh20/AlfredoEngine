@@ -1,11 +1,13 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <cstdio>
 
-#include "glm/glm.hpp"
+#include "Vertex.h"
 
 class Cube {
 public: 
@@ -31,34 +33,34 @@ public:
             // Positions       // Colors           // Texture coords
             // front
             -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
-             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
-             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
-            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,     // Bot left
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.5f,  1.0f,     // Top right
+             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.5f,  0.5f,     // Bot right
+            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.5f,     // Bot left
             // back
-             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
-            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
-             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left
+             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.5f,  1.0f,     // Top right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.5f,  0.5f,     // Bot right
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.5f,     // Bot left
             // left
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
-            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
-            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
-            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left        
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.5f,  1.0f,     // Top right
+            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.5f,  0.5f,     // Bot right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f,  0.5f,     // Bot left        
             // right
-             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,      // Top left
-             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  1.0f,     // Top right
-             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.49f,  0.0f,     // Bot right
-             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.0f,      // Bot left
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  1.0f,     // Top left
+             off,  off, -off,   1.0f, 1.0f, 1.0f,   0.5f,  1.0f,     // Top right
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.5f,  0.5f,     // Bot right
+             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f,  0.5f,     // Bot left
             // top
-            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.51f,  1.0f,     // Top left
+            -off,  off, -off,   1.0f, 1.0f, 1.0f,   0.5f,  1.0f,     // Top left
              off,  off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.51f,  0.0f,     // Bot left
+             off,  off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  0.5f,     // Bot right
+            -off,  off,  off,   1.0f, 1.0f, 1.0f,   0.5f,  0.5f,     // Bot left
             // bottom
-            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.51f,  1.0f,     // Top left
-             off, -off,  off,   1.0f, 1.0f, 1.0f,   1.0f,  1.0f,     // Top right
-             off, -off, -off,   1.0f, 1.0f, 1.0f,   1.0f,  0.0f,     // Bot right
-            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.51f,  0.0f,     // Bot left
+            -off, -off,  off,   1.0f, 1.0f, 1.0f,   0.0f, 0.5f,      // Top left
+             off, -off,  off,   1.0f, 1.0f, 1.0f,   0.5f, 0.5f,      // Top right
+             off, -off, -off,   1.0f, 1.0f, 1.0f,   0.5f, 0.0f,      // Bot right
+            -off, -off, -off,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,      // Bot left
         },
 
         indices{
@@ -70,7 +72,8 @@ public:
            20, 21, 22,    22, 23, 20,  // bottom
         } 
     {}
-    
+
+
 
     void draw() {
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
