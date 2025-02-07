@@ -21,7 +21,7 @@ private:
     int cubeCount;
 
     int xMax = 16;
-    int yMax = 3;
+    int yMax = 16;
     int zMax = 16;
     float noiseOff = 0.2f;
     float off = 0.5f;

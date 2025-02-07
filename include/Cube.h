@@ -22,12 +22,12 @@ public:
 
     bool WillDraw;
 
-    Cube() : x(0), y(0), z(0), WillDraw(false), position(glm::vec3(0,0,0)), vertices{}, indices{} {}
+    Cube() : x(0), y(0), z(0), WillDraw(true), position(glm::vec3(0,0,0)), vertices{}, indices{} {}
 
     Cube(int x, int y, int z, const float off)
         :
         x(x), y(y), z(z),
-        WillDraw(false),
+        WillDraw(true),
         position(glm::vec3(x, y, z)),
         vertices{
             // Positions       // Colors           // Texture coords

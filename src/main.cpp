@@ -90,6 +90,7 @@ int main(void) {
         pair.second.checkSurrounding(chunk.cubes);
     }
 
+
     VertexArray* VAO = new VertexArray();
     VertexBuffer* VBO = new VertexBuffer();
     ElementBuffer *EBO = new ElementBuffer();
