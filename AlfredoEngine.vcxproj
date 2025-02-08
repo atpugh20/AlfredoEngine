@@ -599,7 +599,6 @@
     <Library Include="external\GLFW\glfw3.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\Downloads\grass.png" />
     <Image Include="res\textures\brick.png" />
     <Image Include="res\textures\cobble.png" />
     <Image Include="res\textures\diamond.png" />

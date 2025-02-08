@@ -86,5 +86,4 @@ public:
         }
         //glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
     }
-
 };
